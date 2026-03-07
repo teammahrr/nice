@@ -15,16 +15,16 @@
 }
 
 body {
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    min-height: 100dvh;
     background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     background-image: url('romantic_background.png');
-    /* Fallback name, I'll update it to the actual path */
     background-size: cover;
     background-position: center;
+    background-attachment: fixed;
 }
 
 #game-container {
@@ -303,5 +303,90 @@ body {
     100% {
         transform: translateY(100vh) rotate(720deg);
         opacity: 0;
+    }
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    #game-container {
+        width: 100%;
+        height: 90vh;
+        height: 90dvh;
+        padding: 5px;
+    }
+
+    .screen {
+        padding: 1rem;
+    }
+
+    .glass-card {
+        padding: 1.5rem;
+        width: 95%;
+    }
+
+    .romantic-title {
+        font-size: 2.5rem;
+    }
+
+    .intro-text,
+    .final-text {
+        font-size: 1rem;
+    }
+
+    .level-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .memory-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .memory-card {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+    }
+
+    #catcher-game {
+        width: 100%;
+        max-width: 400px;
+        height: 300px;
+    }
+
+    #word-input {
+        width: 90%;
+    }
+
+    .heart-btn {
+        width: 80px;
+        height: 80px;
+        font-size: 2.2rem;
+    }
+
+    .simon-buttons {
+        gap: 15px;
+    }
+
+    .choice-btns {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .secondary-btn {
+        margin-left: 0;
+    }
+
+    .love-letter {
+        padding: 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .memory-card {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
     }
 }
