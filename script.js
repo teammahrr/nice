@@ -85,20 +85,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LEVEL 2: Catch My Heart ---
     function initLevel2() {
         const canvas = document.getElementById('catcher-canvas');
+        const container = document.getElementById('catcher-game');
         const ctx = canvas.getContext('2d');
-        canvas.width = 600;
-        canvas.height = 400;
+
+        // Set canvas internal resolution to match display size
+        canvas.width = container.offsetWidth;
+        canvas.height = container.offsetHeight;
 
         let score = 0;
         const targetScore = 15;
         let hearts = [];
-        let catcher = { x: 275, y: 350, w: 50, h: 30 };
+        let catcher = {
+            x: canvas.width / 2 - 25,
+            y: canvas.height - 50,
+            w: 50,
+            h: 30
+        };
         let gameActive = true;
 
-        canvas.addEventListener('mousemove', (e) => {
+        const updateCatcherPos = (clientX) => {
             const rect = canvas.getBoundingClientRect();
-            catcher.x = e.clientX - rect.left - catcher.w / 2;
+            catcher.x = clientX - rect.left - catcher.w / 2;
+
+            // Boundary checks
+            if (catcher.x < 0) catcher.x = 0;
+            if (catcher.x > canvas.width - catcher.w) catcher.x = canvas.width - catcher.w;
+        };
+
+        canvas.addEventListener('mousemove', (e) => {
+            updateCatcherPos(e.clientX);
         });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            updateCatcherPos(e.touches[0].clientX);
+        }, { passive: false });
 
         function spawnHeart() {
             if (!gameActive) return;
@@ -268,12 +289,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const yesBtn = document.getElementById('yes-btn');
 
         const moveNo = () => {
-            const x = Math.random() * 300 - 150;
-            const y = Math.random() * 300 - 150;
+            const x = Math.random() * 200 - 100;
+            const y = Math.random() * 200 - 100;
             noBtn.style.transform = `translate(${x}px, ${y}px)`;
         };
 
         noBtn.addEventListener('mouseover', moveNo);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNo();
+        }, { passive: false });
         noBtn.addEventListener('click', moveNo);
 
         yesBtn.addEventListener('click', () => {
