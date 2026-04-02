@@ -1,114 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Quest for Our Love</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hit Adnan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@300;400;600&family=Pacifico&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
+      href="https://fonts.googleapis.com/css2?family=Bungee&family=Outfit:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
-    <div id="game-container">
-        <!-- Start Screen -->
-        <section id="start-screen" class="screen active">
-            <div class="glass-card">
-                <h1 class="romantic-title">Hello Gorgeous,</h1>
-                <p class="intro-text">I've built a little something to show you how much you mean to me. Complete these
-                    5 small levels to unlock a message from my heart.</p>
-                <button id="start-btn" class="primary-btn">Begin Our Journey</button>
-            </div>
-        </section>
+  <body>
+    <main class="game-shell">
+      <section class="hud-card">
+        <h1>Hit Adnan</h1>
+        <p class="sub">Tap Adnan as fast as you can before time runs out.</p>
 
-        <!-- Level 1: Memory Lane -->
-        <section id="level-1" class="screen">
-            <div class="level-header">
-                <h2>Level 1: Memory Lane</h2>
-                <p>Match the symbols of our love.</p>
-            </div>
-            <div class="memory-grid" id="memory-grid"></div>
-        </section>
+        <div class="stats">
+          <div class="stat-box">
+            <span class="label">Time</span>
+            <span id="time-left" class="value">30</span>
+          </div>
+          <div class="stat-box">
+            <span class="label">Score</span>
+            <span id="score" class="value">0</span>
+          </div>
+          <div class="stat-box high">
+            <span class="label">High Score</span>
+            <span id="high-score" class="value">0</span>
+          </div>
+        </div>
 
-        <!-- Level 2: Catch My Heart -->
-        <section id="level-2" class="screen">
-            <div class="level-header">
-                <h2>Level 2: Catch My Heart</h2>
-                <p>Catch enough hearts to fill our meter!</p>
-            </div>
-            <div id="catcher-game">
-                <canvas id="catcher-canvas"></canvas>
-            </div>
-        </section>
+        <div class="controls">
+          <button id="start-btn" class="btn primary">Start Game</button>
+          <button id="restart-btn" class="btn">Restart</button>
+        </div>
 
-        <!-- Level 3: Secret Message -->
-        <section id="level-3" class="screen">
-            <div class="level-header">
-                <h2>Level 3: Secret Scramble</h2>
-                <p>Unscramble the words that describe us.</p>
-            </div>
-            <div class="scramble-container">
-                <div id="word-display" class="scrambled-word"></div>
-                <input type="text" id="word-input" placeholder="Type the word here...">
-                <button id="check-word-btn" class="secondary-btn">Check</button>
-                <div id="scramble-progress">Word 1 of 3</div>
-            </div>
-        </section>
+        <p id="status" class="status">Press Start to begin.</p>
+      </section>
 
-        <!-- Level 4: Rhythm of Love -->
-        <section id="level-4" class="screen">
-            <div class="level-header">
-                <h2>Level 4: Heartbeat Rhythm</h2>
-                <p>Follow the sequence of the glowing hearts.</p>
-            </div>
-            <div class="simon-container">
-                <div class="simon-buttons">
-                    <div class="heart-btn" data-color="red" id="heart-red">❤️</div>
-                    <div class="heart-btn" data-color="pink" id="heart-pink">💖</div>
-                    <div class="heart-btn" data-color="gold" id="heart-gold">✨</div>
-                    <div class="heart-btn" data-color="purple" id="heart-purple">💜</div>
-                </div>
-                <button id="simon-start-btn" class="secondary-btn">Start Pattern</button>
-            </div>
-        </section>
-
-        <!-- Level 5: The Final Choice -->
-        <section id="level-5" class="screen">
-            <div class="glass-card final-card">
-                <h2 class="romantic-title">The Final Question...</h2>
-                <p class="final-text">Through every level, every memory, and every moment, my love for you only grows
-                    stronger. Will you be mine forever?</p>
-                <div class="choice-btns">
-                    <button id="yes-btn" class="primary-btn">YES! ❤️</button>
-                    <button id="no-btn" class="secondary-btn">No</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Success Screen -->
-        <section id="success-screen" class="screen">
-            <div class="glass-card success-card">
-                <div class="fireworks-container"></div>
-                <h1 class="romantic-title">I Love You!</h1>
-                <div class="love-letter">
-                    <p>My dearest,</p>
-                    <p>You are the most amazing person I've ever known. These little games are just a tiny reflection of
-                        the joy you bring into my life every day.</p>
-                    <p>I Promise to cherish you, listen to you, and love you more with every passing second.</p>
-                    <p>Forever Yours, <br> [Your Name]</p>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- Background Elements -->
-    <div class="floating-hearts" id="floating-hearts"></div>
+      <section
+        id="board"
+        class="board"
+        aria-label="Hit Adnan game board"
+      ></section>
+    </main>
 
     <script src="script.js"></script>
-</body>
-
+  </body>
 </html>
