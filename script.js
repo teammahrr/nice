@@ -1,160 +1,102 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const GAME_TIME = 30;
-    const STORAGE_KEY = 'hit-adnan-high-score';
+document.addEventListener("DOMContentLoaded", () => {
+    const loveCard = document.getElementById("love-card");
+    const fatkoCard = document.getElementById("fatko-card");
+    const hugCard = document.getElementById("hug-card");
+    const answerZone = document.getElementById("answer-zone");
+    const yesLove = document.getElementById("yes-love");
+    const noLove = document.getElementById("no-love");
+    const tease = document.getElementById("tease");
+    const adnanFigure = document.getElementById("adnan-figure");
+    const burstLayer = document.getElementById("burst-layer");
+    const punchCount = document.getElementById("punch-count");
+    const hugBtn = document.getElementById("hug-btn");
+    const hugMessage = document.getElementById("hug-message");
 
-    const board = document.getElementById('board');
-    const startBtn = document.getElementById('start-btn');
-    const restartBtn = document.getElementById('restart-btn');
-    const timeEl = document.getElementById('time-left');
-    const scoreEl = document.getElementById('score');
-    const highScoreEl = document.getElementById('high-score');
-    const statusEl = document.getElementById('status');
+    const noMessages = [
+        "nope, that button is shy.",
+        "almost... but still no.",
+        "it ran away because it knows the truth.",
+        "try again, habibti.",
+        "the pink button misses you."
+    ];
+    const punchWords = ["bonk", "fatko", "ouch", "sorry", "ok ok"];
 
-    let holes = [];
-    let score = 0;
-    let timeLeft = GAME_TIME;
-    let highScore = Number(localStorage.getItem(STORAGE_KEY) || 0);
-    let gameActive = false;
-    let currentHole = null;
-    let countdownTimer = null;
-    let popTimer = null;
+    let noMoveCount = 0;
+    let punches = 0;
 
-    function buildBoard() {
-        board.innerHTML = '';
-
-        for (let i = 0; i < 9; i++) {
-            const hole = document.createElement('div');
-            hole.className = 'hole';
-
-            const adnan = document.createElement('button');
-            adnan.type = 'button';
-            adnan.className = 'adnan';
-            adnan.setAttribute('aria-label', 'Hit Adnan');
-            adnan.addEventListener('click', () => hitHole(hole));
-
-            hole.appendChild(adnan);
-            board.appendChild(hole);
-        }
-
-        holes = Array.from(document.querySelectorAll('.hole'));
-    }
-
-    function updateScoreboard() {
-        scoreEl.textContent = String(score);
-        timeEl.textContent = String(timeLeft);
-        highScoreEl.textContent = String(highScore);
-    }
-
-    function clearPopState() {
-        holes.forEach((hole) => {
-            hole.classList.remove('up', 'hit');
-            hole.dataset.hit = '0';
+    function showCard(activeCard) {
+        [loveCard, fatkoCard, hugCard].forEach((card) => {
+            card.classList.toggle("is-active", card === activeCard);
         });
-        currentHole = null;
     }
 
-    function hitHole(hole) {
-        if (!gameActive) {
+    function moveNoButton() {
+        const zoneRect = answerZone.getBoundingClientRect();
+        const buttonRect = noLove.getBoundingClientRect();
+        const padding = 8;
+        const maxX = Math.max(padding, zoneRect.width - buttonRect.width - padding);
+        const maxY = Math.max(padding, zoneRect.height - buttonRect.height - padding);
+        const x = padding + Math.random() * (maxX - padding);
+        const y = padding + Math.random() * (maxY - padding);
+
+        noLove.style.left = `${x}px`;
+        noLove.style.top = `${y}px`;
+        noLove.style.transform = "none";
+        tease.textContent = noMessages[noMoveCount % noMessages.length];
+        noMoveCount += 1;
+    }
+
+    function createBurst() {
+        const burst = document.createElement("span");
+        burst.className = "burst";
+        burst.textContent = punchWords[Math.min(punches, punchWords.length - 1)];
+        burst.style.left = `${38 + Math.random() * 24}%`;
+        burst.style.top = `${22 + Math.random() * 24}%`;
+        burstLayer.appendChild(burst);
+        burst.addEventListener("animationend", () => burst.remove());
+    }
+
+    function punchAdnan() {
+        if (punches >= 5) {
             return;
         }
 
-        if (!hole.classList.contains('up')) {
-            return;
-        }
+        punches += 1;
+        punchCount.textContent = String(punches);
+        createBurst();
+        adnanFigure.classList.remove("is-hit");
+        void adnanFigure.offsetWidth;
+        adnanFigure.classList.add("is-hit");
 
-        if (hole.dataset.hit === '1') {
-            return;
+        if (punches === 5) {
+            setTimeout(() => {
+                showCard(hugCard);
+            }, 650);
         }
-
-        hole.dataset.hit = '1';
-        hole.classList.add('hit');
-        score += 1;
-        updateScoreboard();
     }
 
-    function randomHole() {
-        if (holes.length === 0) {
-            return null;
-        }
-
-        const available = holes.filter((hole) => hole !== currentHole);
-        const source = available.length > 0 ? available : holes;
-        const idx = Math.floor(Math.random() * source.length);
-        return source[idx];
+    function giveHug() {
+        hugMessage.textContent = "hug accepted. Adnan is now 500% happier.";
+        hugBtn.textContent = "Hug delivered";
+        hugBtn.disabled = true;
     }
 
-    function popAdnan() {
-        if (!gameActive) {
-            return;
-        }
+    noLove.addEventListener("pointerenter", moveNoButton);
+    noLove.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        moveNoButton();
+    });
+    noLove.addEventListener("click", (event) => {
+        event.preventDefault();
+        moveNoButton();
+    });
+    noLove.addEventListener("focus", moveNoButton);
 
-        clearPopState();
+    yesLove.addEventListener("click", () => {
+        showCard(fatkoCard);
+        adnanFigure.focus();
+    });
 
-        const hole = randomHole();
-        if (!hole) {
-            return;
-        }
-
-        currentHole = hole;
-        hole.classList.add('up');
-
-        const visibleFor = 450 + Math.random() * 350;
-        const nextPop = 420 + Math.random() * 450;
-
-        setTimeout(() => {
-            hole.classList.remove('up', 'hit');
-            hole.dataset.hit = '0';
-            if (currentHole === hole) {
-                currentHole = null;
-            }
-        }, visibleFor);
-
-        popTimer = setTimeout(popAdnan, nextPop);
-    }
-
-    function endGame() {
-        gameActive = false;
-        clearTimeout(popTimer);
-        clearInterval(countdownTimer);
-        clearPopState();
-
-        if (score > highScore) {
-            highScore = score;
-            localStorage.setItem(STORAGE_KEY, String(highScore));
-            statusEl.textContent = `Time up! New high score: ${score}.`; 
-        } else {
-            statusEl.textContent = `Time up! You scored ${score}.`; 
-        }
-
-        updateScoreboard();
-    }
-
-    function startGame() {
-        clearTimeout(popTimer);
-        clearInterval(countdownTimer);
-
-        score = 0;
-        timeLeft = GAME_TIME;
-        gameActive = true;
-        statusEl.textContent = 'Go! Hit Adnan quickly!';
-
-        updateScoreboard();
-        clearPopState();
-        popAdnan();
-
-        countdownTimer = setInterval(() => {
-            timeLeft -= 1;
-            updateScoreboard();
-
-            if (timeLeft <= 0) {
-                endGame();
-            }
-        }, 1000);
-    }
-
-    startBtn.addEventListener('click', startGame);
-    restartBtn.addEventListener('click', startGame);
-
-    buildBoard();
-    updateScoreboard();
+    adnanFigure.addEventListener("click", punchAdnan);
+    hugBtn.addEventListener("click", giveHug);
 });
