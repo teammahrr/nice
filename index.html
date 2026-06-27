@@ -3,50 +3,79 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hit Adnan</title>
+    <title>For My Favourite Girl</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bungee&family=Outfit:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bungee&family=Outfit:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <main class="game-shell">
-      <section class="hud-card">
-        <h1>Hit Adnan</h1>
-        <p class="sub">Tap Adnan as fast as you can before time runs out.</p>
+    <main class="love-shell">
+      <section id="love-card" class="scene-card is-active" aria-live="polite">
+        <p class="eyebrow">tiny emergency question</p>
+        <h1>Do u love me?</h1>
+        <p class="soft-copy">
+          Choose carefully. One answer is correct and the other one has decided
+          to become impossible.
+        </p>
 
-        <div class="stats">
-          <div class="stat-box">
-            <span class="label">Time</span>
-            <span id="time-left" class="value">30</span>
-          </div>
-          <div class="stat-box">
-            <span class="label">Score</span>
-            <span id="score" class="value">0</span>
-          </div>
-          <div class="stat-box high">
-            <span class="label">High Score</span>
-            <span id="high-score" class="value">0</span>
-          </div>
+        <div id="answer-zone" class="answer-zone">
+          <button id="yes-love" class="btn yes-btn" type="button">Yes</button>
+          <button id="no-love" class="btn no-btn" type="button">No</button>
         </div>
 
-        <div class="controls">
-          <button id="start-btn" class="btn primary">Start Game</button>
-          <button id="restart-btn" class="btn">Restart</button>
-        </div>
-
-        <p id="status" class="status">Press Start to begin.</p>
+        <p id="tease" class="tease">psst... try the pink one.</p>
       </section>
 
-      <section
-        id="board"
-        class="board"
-        aria-label="Hit Adnan game board"
-      ></section>
+      <section id="fatko-card" class="scene-card" aria-live="polite">
+        <p class="eyebrow">second important question</p>
+        <h2>Do u want to give Adnan fatko?</h2>
+        <p class="soft-copy">
+          He accepts this punishment with full drama and zero complaints.
+        </p>
+
+        <div class="arena">
+          <button
+            id="adnan-figure"
+            class="adnan-figure"
+            type="button"
+            aria-label="Punch Adnan"
+          >
+            <span class="hair"></span>
+            <span class="face">
+              <span class="eye left"></span>
+              <span class="eye right"></span>
+              <span class="mouth"></span>
+            </span>
+            <span class="shirt">Adnan</span>
+            <span class="arm left-arm"></span>
+            <span class="arm right-arm"></span>
+          </button>
+          <div id="burst-layer" class="burst-layer" aria-hidden="true"></div>
+        </div>
+
+        <div class="punch-meter" aria-label="Punch progress">
+          <span id="punch-count">0</span>
+          <span>/ 5 fatkos</span>
+        </div>
+      </section>
+
+      <section id="hug-card" class="scene-card hug-card" aria-live="polite">
+        <p class="eyebrow">final boss defeated</p>
+        <h2>Now hug?</h2>
+        <p class="soft-copy">
+          Adnan has learned his lesson. He is requesting one soft hug and a
+          chance to make you smile.
+        </p>
+        <button id="hug-btn" class="btn yes-btn hug-btn" type="button">
+          Give hug
+        </button>
+        <p id="hug-message" class="hug-message"></p>
+      </section>
     </main>
 
     <script src="script.js"></script>
