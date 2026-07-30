@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>For My Favourite Girl</title>
+    <title>Scrambled Words</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,69 +15,160 @@
 
   <body>
     <main class="love-shell">
-      <section id="love-card" class="scene-card is-active" aria-live="polite">
-        <p class="eyebrow">tiny emergency question</p>
-        <h1>Do u love me?</h1>
+      <section id="setup-card" class="scene-card is-active">
+        <p class="eyebrow">set up the game</p>
+        <h1>Scrambled</h1>
         <p class="soft-copy">
-          Choose carefully. One answer is correct and the other one has decided
-          to become impossible.
+          Pick a category, pick how many words, then share your screen. Points
+          are given by hand, so you decide who deserves them.
         </p>
 
-        <div id="answer-zone" class="answer-zone">
-          <button id="yes-love" class="btn yes-btn" type="button">Yes</button>
-          <button id="no-love" class="btn no-btn" type="button">No</button>
+        <div class="field">
+          <label>Category</label>
+          <div id="category-grid" class="category-grid"></div>
+          <p id="pool-note" class="field-note">pick a category to begin</p>
         </div>
 
-        <p id="tease" class="tease">psst... try the pink one.</p>
-      </section>
-
-      <section id="fatko-card" class="scene-card" aria-live="polite">
-        <p class="eyebrow">second important question</p>
-        <h2>Do u want to give Adnan fatko?</h2>
-        <p class="soft-copy">
-          He accepts this punishment with full drama and zero complaints.
-        </p>
-
-        <div class="arena">
-          <button
-            id="adnan-figure"
-            class="adnan-figure"
-            type="button"
-            aria-label="Punch Adnan"
-          >
-            <span class="hair"></span>
-            <span class="face">
-              <span class="eye left"></span>
-              <span class="eye right"></span>
-              <span class="mouth"></span>
-            </span>
-            <span class="shirt">Adnan</span>
-            <span class="arm left-arm"></span>
-            <span class="arm right-arm"></span>
-          </button>
-          <div id="burst-layer" class="burst-layer" aria-hidden="true"></div>
+        <div class="field">
+          <label for="count-range">
+            How many words &mdash; <b id="count-label">10</b>
+          </label>
+          <input
+            id="count-range"
+            type="range"
+            min="3"
+            max="15"
+            step="1"
+            value="10"
+            class="count-range"
+          />
         </div>
 
-        <div class="punch-meter" aria-label="Punch progress">
-          <span id="punch-count">0</span>
-          <span>/ 5 fatkos</span>
+        <div class="field-row">
+          <div class="field">
+            <label for="p1-name">Player 1</label>
+            <input id="p1-name" type="text" value="Adnan" maxlength="14" />
+          </div>
+          <div class="field">
+            <label for="p2-name">Player 2</label>
+            <input id="p2-name" type="text" value="Her" maxlength="14" />
+          </div>
         </div>
-      </section>
 
-      <section id="hug-card" class="scene-card hug-card" aria-live="polite">
-        <p class="eyebrow">final boss defeated</p>
-        <h2>Now hug?</h2>
-        <p class="soft-copy">
-          Adnan has learned his lesson. He is requesting one soft hug and a
-          chance to make you smile.
-        </p>
-        <button id="hug-btn" class="btn yes-btn hug-btn" type="button">
-          Give hug
+        <div class="field-row">
+          <div class="field">
+            <label for="timer-select">Timer per word</label>
+            <select id="timer-select">
+              <option value="0">No timer</option>
+              <option value="30">30 seconds</option>
+              <option value="45" selected>45 seconds</option>
+              <option value="60">60 seconds</option>
+              <option value="90">90 seconds</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="difficulty-select">Word length</label>
+            <select id="difficulty-select">
+              <option value="any" selected>Any length</option>
+              <option value="short">Short & easy</option>
+              <option value="long">Long & tricky</option>
+            </select>
+          </div>
+        </div>
+
+        <button id="start-btn" class="btn yes-btn wide-btn" type="button">
+          Start game
         </button>
-        <p id="hug-message" class="hug-message"></p>
+        <p id="setup-error" class="tease"></p>
+        <button id="reset-memory" class="link-btn" type="button">
+          reset used-words memory
+        </button>
+      </section>
+
+      <section id="game-card" class="scene-card game-card">
+        <div class="game-top">
+          <span class="pill" id="round-pill">Word 1 / 1</span>
+          <span class="pill category-pill" id="category-pill">Category</span>
+          <span class="pill timer-pill" id="timer-pill">--</span>
+        </div>
+
+        <div class="scoreboard">
+          <div class="score-slot" id="slot-1">
+            <p class="score-name" id="score-name-1">Adnan</p>
+            <p class="score-value" id="score-value-1">0</p>
+            <div class="score-buttons">
+              <button class="btn point-btn" type="button" data-point="1">
+                +1
+              </button>
+              <button class="btn minus-btn" type="button" data-minus="1">
+                &minus;
+              </button>
+            </div>
+          </div>
+          <div class="score-slot" id="slot-2">
+            <p class="score-name" id="score-name-2">Her</p>
+            <p class="score-value" id="score-value-2">0</p>
+            <div class="score-buttons">
+              <button class="btn point-btn" type="button" data-point="2">
+                +1
+              </button>
+              <button class="btn minus-btn" type="button" data-minus="2">
+                &minus;
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="scramble-zone" class="scramble-zone" aria-live="polite"></div>
+
+        <p id="word-hint" class="word-hint"></p>
+        <p id="answer-reveal" class="answer-reveal"></p>
+
+        <div class="game-actions">
+          <button id="shuffle-btn" class="btn ghost-btn" type="button">
+            Re-scramble
+          </button>
+          <button id="reveal-btn" class="btn ghost-btn" type="button">
+            Reveal answer
+          </button>
+          <button id="next-btn" class="btn yes-btn" type="button">
+            Next word
+          </button>
+        </div>
+
+        <p class="keys-note">
+          keys: <b>space</b> reveal &middot; <b>enter</b> next &middot;
+          <b>1</b> / <b>2</b> give a point &middot; <b>r</b> re-scramble
+        </p>
+      </section>
+
+      <section id="end-card" class="scene-card">
+        <p class="eyebrow">game over</p>
+        <h2 id="end-title">Final score</h2>
+        <div class="final-board">
+          <div class="final-slot">
+            <p class="score-name" id="final-name-1">Adnan</p>
+            <p class="final-value" id="final-value-1">0</p>
+          </div>
+          <span class="final-vs">vs</span>
+          <div class="final-slot">
+            <p class="score-name" id="final-name-2">Her</p>
+            <p class="final-value" id="final-value-2">0</p>
+          </div>
+        </div>
+        <p id="end-message" class="hug-message"></p>
+        <div class="game-actions">
+          <button id="replay-btn" class="btn ghost-btn" type="button">
+            New round, same category
+          </button>
+          <button id="edit-btn" class="btn yes-btn" type="button">
+            Change category
+          </button>
+        </div>
       </section>
     </main>
 
+    <script src="words.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
