@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let scores = [0, 0];
     let names = ["Adnan", "Her"];
     let revealed = false;
+    let currentChunks = [];
     let timerSeconds = 0;
     let secondsLeft = 0;
     let timerId = null;
@@ -297,26 +298,73 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* ---------- game ---------- */
 
-    function renderScramble(word) {
-        const letterTotal = letterCount(word);
-        scrambleZone.classList.toggle("is-long", letterTotal > 9);
-        scrambleZone.classList.toggle("is-very-long", letterTotal > 14);
+    /* Sizes the tiles so the longest word always fits on a single line,
+       and so a short phrase keeps all its words on one line when it can. */
+    function sizeTiles(chunks) {
+        const available = scrambleZone.clientWidth;
+        if (!available) {
+            return;
+        }
 
+        const lengths = chunks.map((chunk) => chunk.length);
+        const longest = [Math.max.apply(null, lengths)];
+
+        // Widest tile that lets these words sit on a single line together.
+        function fitWidth(wordLengths, gap, wordGap) {
+            const letters = wordLengths.reduce((sum, len) => sum + len, 0);
+            const innerGaps = wordLengths.reduce((sum, len) => sum + (len - 1), 0) * gap;
+            const betweenGaps = (wordLengths.length - 1) * wordGap;
+            return (available - 2 - innerGaps - betweenGaps) / letters;
+        }
+
+        let gap = 8;
+        let wordGap = 30;
+        // Try the whole phrase on one line; if that gets cramped, fall back to
+        // fitting the longest word — a word itself never breaks across lines.
+        let width = fitWidth(lengths, gap, wordGap);
+        if (width < 26) {
+            // The phrase can't fit on one line at a readable size, so fit the
+            // longest word instead and let the words stack.
+            width = fitWidth(longest, gap, 0);
+            if (width < 30) {
+                gap = 5;
+                wordGap = 18;
+                width = fitWidth(longest, gap, 0);
+            }
+        }
+
+        width = Math.max(20, Math.min(62, width));
+        scrambleZone.style.setProperty("--tile-w", `${width}px`);
+        scrambleZone.style.setProperty("--tile-h", `${Math.round(width * 1.16)}px`);
+        scrambleZone.style.setProperty("--tile-font", `${Math.round(width * 0.54)}px`);
+        scrambleZone.style.setProperty("--tile-gap", `${gap}px`);
+        scrambleZone.style.setProperty("--word-gap", `${wordGap}px`);
+        scrambleZone.style.setProperty(
+            "--tile-radius",
+            `${Math.max(8, Math.round(width * 0.26))}px`
+        );
+    }
+
+    function renderScramble(word) {
+        currentChunks = word.split(" ").map(scrambleChunk);
+        paintTiles();
+    }
+
+    function paintTiles() {
         scrambleZone.innerHTML = "";
-        word.split(" ").forEach((chunk) => {
+        currentChunks.forEach((chunk) => {
             const group = document.createElement("div");
             group.className = "tile-group";
-            scrambleChunk(chunk)
-                .split("")
-                .forEach((letter, letterIndex) => {
-                    const tile = document.createElement("span");
-                    tile.className = "tile";
-                    tile.textContent = letter.toUpperCase();
-                    tile.style.animationDelay = `${letterIndex * 0.045}s`;
-                    group.appendChild(tile);
-                });
+            chunk.split("").forEach((letter, letterIndex) => {
+                const tile = document.createElement("span");
+                tile.className = "tile";
+                tile.textContent = letter.toUpperCase();
+                tile.style.animationDelay = `${letterIndex * 0.045}s`;
+                group.appendChild(tile);
+            });
             scrambleZone.appendChild(group);
         });
+        sizeTiles(currentChunks);
     }
 
     function paintScores() {
@@ -433,6 +481,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ---------- wiring ---------- */
+
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+        if (!gameCard.classList.contains("is-active") || currentChunks.length === 0) {
+            return;
+        }
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => sizeTiles(currentChunks), 120);
+    });
 
     countRange.addEventListener("input", () => {
         countLabel.textContent = countRange.value;
