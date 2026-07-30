@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let words = [];
     let index = 0;
     let scores = [0, 0];
-    let names = ["Adnan", "Her"];
+    let names = ["Player 1", "Player 2"];
     let revealed = false;
     let currentChunks = [];
     let timerSeconds = 0;
@@ -245,8 +245,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         countRange.value = saved.count || "10";
         countLabel.textContent = countRange.value;
-        p1Name.value = saved.p1 || "Adnan";
-        p2Name.value = saved.p2 || "Her";
+        p1Name.value = saved.p1 || "Player 1";
+        p2Name.value = saved.p2 || "Player 2";
         timerSelect.value = saved.timer || "45";
         difficultySelect.value = saved.difficulty || "any";
         if (saved.category && getCategory(saved.category)) {
