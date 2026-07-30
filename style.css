@@ -462,44 +462,37 @@ h2 {
 }
 
 .scramble-zone {
-    --tile-w: clamp(42px, 9vw, 62px);
-    --tile-h: clamp(50px, 10.5vw, 72px);
-    --tile-font: clamp(1.5rem, 4.6vw, 2.2rem);
+    --tile-w: 52px;
+    --tile-h: 60px;
+    --tile-font: 28px;
+    --tile-gap: 8px;
+    --word-gap: 30px;
+    --tile-radius: 16px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 12px 30px;
+    gap: 12px var(--word-gap);
     margin: 26px 0 6px;
     min-height: 82px;
 }
 
-.scramble-zone.is-long {
-    --tile-w: clamp(38px, 7vw, 52px);
-    --tile-h: clamp(46px, 8.4vw, 62px);
-    --tile-font: clamp(1.3rem, 3.8vw, 1.85rem);
-}
-
-.scramble-zone.is-very-long {
-    --tile-w: clamp(32px, 5.8vw, 44px);
-    --tile-h: clamp(40px, 7vw, 54px);
-    --tile-font: clamp(1.1rem, 3.2vw, 1.55rem);
-}
-
+/* A word never breaks across lines — tile size is computed to fit instead. */
 .tile-group {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
-    gap: 8px;
+    gap: var(--tile-gap);
 }
 
 .tile {
     display: grid;
     place-items: center;
+    flex: 0 0 auto;
     width: var(--tile-w);
     height: var(--tile-h);
     border: 2px solid rgba(255, 255, 255, 0.85);
-    border-radius: 16px;
+    border-radius: var(--tile-radius);
     background: linear-gradient(160deg, #fff2c7, var(--butter));
     color: #4a3416;
     font-family: "Bungee", "Outfit", system-ui, sans-serif;
